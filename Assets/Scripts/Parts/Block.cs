@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class Block : Part
+namespace RobotGame
 {
-    public bool canAttach = true;
+	public class Block : Part
+	{
+		public bool canAttach = true;
+	} 
 }

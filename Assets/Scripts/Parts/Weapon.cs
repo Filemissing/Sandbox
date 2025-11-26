@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class Weapon : Part
+namespace RobotGame
 {
-    
+	public class Weapon : Part
+	{
+
+	}
 }

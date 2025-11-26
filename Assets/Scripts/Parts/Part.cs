@@ -1,15 +1,18 @@
 using UnityEngine;
 
-public class Part : MonoBehaviour
+namespace RobotGame
 {
-    public float weight;
-    public float hp;
-    public RectInt space;
-
-    public void Detatch()
+    public class Part : MonoBehaviour
     {
-        transform.SetParent(null);
-        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.mass = weight;
-    }
+        public float weight;
+        public float hp;
+        public RectInt space;
+
+        public void Detatch()
+        {
+            transform.SetParent(null);
+            Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+            rb.mass = weight;
+        }
+    } 
 }

@@ -1,34 +1,37 @@
 using UnityEngine;
 
-public class BuildField : MonoBehaviour
+namespace RobotGame
 {
-    [SerializeField] Vector2Int size;
-
-    bool[,] field; // true is occupied, false is free
-    private void Awake()
+    public class BuildField : MonoBehaviour
     {
-        field = new bool[size.x, size.y];
-    }
+        [SerializeField] Vector2Int size;
 
-    public void AddPart(Part part, Vector2Int position)
-    {
-        bool canPlace = true;
-        RectInt space = part.space;
-        foreach(Vector2Int pos in space.allPositionsWithin)
+        bool[,] field; // true is occupied, false is free
+        private void Awake()
         {
-            Vector2Int adjustedPos = Vector2Int.RoundToInt(space.center) + pos;
-            if (field[adjustedPos.x, adjustedPos.y])
-            {
-                canPlace = false; 
-                break;
-            }
+            field = new bool[size.x, size.y];
         }
-        if (canPlace)
+
+        public void AddPart(Part part, Vector2Int position)
         {
+            bool canPlace = true;
+            RectInt space = part.space;
             foreach (Vector2Int pos in space.allPositionsWithin)
             {
                 Vector2Int adjustedPos = Vector2Int.RoundToInt(space.center) + pos;
-                field[adjustedPos.x, adjustedPos.y] = true;
+                if (field[adjustedPos.x, adjustedPos.y])
+                {
+                    canPlace = false;
+                    break;
+                }
+            }
+            if (canPlace)
+            {
+                foreach (Vector2Int pos in space.allPositionsWithin)
+                {
+                    Vector2Int adjustedPos = Vector2Int.RoundToInt(space.center) + pos;
+                    field[adjustedPos.x, adjustedPos.y] = true;
+                }
             }
         }
     }

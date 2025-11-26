@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class Wheel : Part
+namespace RobotGame
 {
-    public float speed;
+	public class Wheel : Part
+	{
+		public float speed;
+	} 
 }

@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DropHandler : MonoBehaviour, IDropHandler
+namespace RobotGame
 {
-    public void OnDrop(PointerEventData eventData)
+    public class DropHandler : MonoBehaviour, IDropHandler
     {
-        bool canDrop = true;
+        public void OnDrop(PointerEventData eventData)
+        {
+            bool canDrop = true;
 
-        if (canDrop) eventData.Use(); // use if drop is allowed
+            if (canDrop) eventData.Use(); // use if drop is allowed
+        }
     }
 }
