@@ -18,8 +18,8 @@ namespace RobotGame
 
         public void OnDrag(PointerEventData eventData)
         {
-            Vector2 roundedPosition = Vector2Int.RoundToInt(eventData.position);
-            transform.position = new Vector3(roundedPosition.x, roundedPosition.y, zOffset);
+            Vector3 position = GetWorldPositionOnPlane(eventData.position, zOffset);
+            transform.position = Vector3Int.RoundToInt(position);
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -27,6 +27,15 @@ namespace RobotGame
             isDragging = false;
             if (eventData.used) return;
             transform.SetParent(originalParent);
+        }
+
+        public Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+            Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, z));
+            float distance;
+            xy.Raycast(ray, out distance);
+            return ray.GetPoint(distance);
         }
     } 
 }
