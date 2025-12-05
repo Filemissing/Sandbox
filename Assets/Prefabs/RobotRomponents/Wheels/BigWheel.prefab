@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3675696226861723597}
-  - component: {fileID: -4137967852036614705}
+  - component: {fileID: 2343759406076886230}
   m_Layer: 0
   m_Name: BigWheel
   m_TagString: Untagged
@@ -144,7 +144,7 @@ Transform:
   - {fileID: 1390923349557521228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-4137967852036614705
+--- !u!114 &2343759406076886230
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +153,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3618203852971147480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3364fa9d7f9f12448cb6d4b7dcdc388, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cee687324d99e541b19249cf0578109, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Draggable
+  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Wheel
+  weight: 0
+  hp: 0
+  space:
+    x: -1
+    y: -1
+    width: 3
+    height: 3
   zOffset: -1
+  isOnField: 0
+  speed: 0

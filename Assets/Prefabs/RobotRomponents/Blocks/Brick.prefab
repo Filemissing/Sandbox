@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2651219661778477912}
-  - component: {fileID: 5574211283251993787}
+  - component: {fileID: 4338820112012953814}
   m_Layer: 0
   m_Name: Brick
   m_TagString: Untagged
@@ -144,7 +144,7 @@ Transform:
   - {fileID: 5679916833205741669}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5574211283251993787
+--- !u!114 &4338820112012953814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +153,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7441862397184916438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3364fa9d7f9f12448cb6d4b7dcdc388, type: 3}
+  m_Script: {fileID: 11500000, guid: 55896765ac843dd4c9758234564d7306, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Draggable
+  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Block
+  weight: 0
+  hp: 0
+  space:
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   zOffset: 0
+  isOnField: 0
+  canAttach: 1

@@ -1,39 +1,158 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace RobotGame
 {
-    public class BuildField : MonoBehaviour
+    public class BuildField : MonoBehaviour, IDropHandler
     {
+        public static BuildField instance;
+
+
         [SerializeField] RectInt rect;
 
-        bool[,] field; // true is occupied, false is free
+        // true is occupied, false is free
+        Block[,] backField; // contains building blocks
+        (Part, bool)[,] frontField; // contains weapons and wheels, bool isRoot for multi-cell parts
+
         private void Awake()
         {
-            field = new bool[rect.width, rect.height];
+            instance = this;
+            backField = new Block[rect.width, rect.height];
+            frontField = new (Part, bool)[rect.width, rect.height];
+
+            // set texture scale and offset
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial.SetTextureScale("_BaseMap", rect.size);
             meshRenderer.sharedMaterial.SetTextureOffset("_BaseMap", new Vector2(.5f, .5f));
         }
 
-        public void AddPart(Part part, Vector2Int position)
+        public bool TryAddPart(Part part, Vector2Int pos)
         {
-            bool canPlace = true;
-            RectInt space = part.space;
-            foreach (Vector2Int pos in space.allPositionsWithin)
+            Vector2Int position = pos - rect.position;
+            if (part is Block block)
             {
-                Vector2Int adjustedPos = Vector2Int.RoundToInt(space.center) + pos;
-                if (field[adjustedPos.x, adjustedPos.y])
+                if(part.space.width > 1 || part.space.height > 1)
                 {
-                    canPlace = false;
-                    break;
+                    Debug.LogError("Blocks larger than 1x1 are not supported yet.");
+                    return false;
                 }
-            }
-            if (canPlace)
-            {
-                foreach (Vector2Int pos in space.allPositionsWithin)
+
+                if (backField[position.x, position.y] == null)
                 {
-                    Vector2Int adjustedPos = Vector2Int.RoundToInt(space.center) + pos;
-                    field[adjustedPos.x, adjustedPos.y] = true;
+                    backField[position.x, position.y] = block;
+
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                if (backField[position.x, position.y] == null) return false; // must be attached to a block
+
+                bool canPlace = true;
+                RectInt space = part.space;
+                foreach (Vector2Int pos1 in space.allPositionsWithin)
+                {
+                    Vector2Int adjustedPos = Vector2Int.RoundToInt(position) + pos1;
+
+                    if (adjustedPos.x < 0 || adjustedPos.x >= rect.width || adjustedPos.y < 0 || adjustedPos.y >= rect.height)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+
+                    if (frontField[adjustedPos.x, adjustedPos.y].Item1 != null)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace)
+                {
+                    foreach (Vector2Int pos1 in space.allPositionsWithin)
+                    {
+                        Vector2Int adjustedPos = Vector2Int.RoundToInt(position) + pos1;
+                        frontField[adjustedPos.x, adjustedPos.y].Item1 = part;
+
+                        if (backField[adjustedPos.x, adjustedPos.y] != null)
+                        {
+                            backField[adjustedPos.x, adjustedPos.y].attachedPart = part;
+                        }
+                    }
+
+                    frontField[position.x, position.y].Item2 = true; // mark root
+                }
+                return canPlace;
+            }
+        }
+        public Vector2Int GetRoot(Vector2Int position)
+        {
+            (Part part, bool isRoot) = frontField[position.x, position.y];
+            if(part == null)
+            {
+                throw new Exception("No part at given position.");
+            }
+
+            return Vector2Int.RoundToInt(part.rootBlock.transform.position) - rect.position;
+        }
+        public Vector2Int GetRoot(Part part)
+        {
+            if(part is Block)
+            {
+                return Vector2Int.RoundToInt(part.transform.position) - rect.position;
+            }
+            else
+            {
+                return Vector2Int.RoundToInt(part.rootBlock.transform.position) - rect.position;
+            }
+        }
+        public void RemovePart(Part part, Vector2Int pos)
+        {
+            Vector2Int root = GetRoot(part);
+
+            if (part is Block block)
+            {
+                if (block.attachedPart != null)
+                {
+                    RemovePart(block.attachedPart, root);
+                    block.attachedPart = null;
+                }
+
+                backField[root.x, root.y] = null;
+                return;
+            }
+
+            // non block part
+            foreach (var cell in part.space.allPositionsWithin)
+            {
+                Vector2Int p = root + cell;
+
+
+                frontField[p.x, p.y] = (null, false);
+
+
+                Block b = backField[p.x, p.y];
+
+                if (b != null)
+                    b.attachedPart = null;
+            }
+
+            part.isOnField = false;
+            part.rootBlock = null;
+        }
+
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            if (eventData.pointerDrag.TryGetComponent<Part>(out Part part))
+            {
+                if(TryAddPart(part, Vector2Int.RoundToInt(part.GetWorldPositionOnPlane(eventData.position, part.zOffset))))
+                {
+                    part.isOnField = true;
+                    eventData.Use();
                 }
             }
         }

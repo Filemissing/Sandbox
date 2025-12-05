@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1157763831319218701}
-  - component: {fileID: 9109440478133231535}
+  - component: {fileID: 828254016700175640}
   m_Layer: 0
   m_Name: Metal
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 1003240191801579953}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9109440478133231535
+--- !u!114 &828254016700175640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +42,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 427911409189911317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3364fa9d7f9f12448cb6d4b7dcdc388, type: 3}
+  m_Script: {fileID: 11500000, guid: 55896765ac843dd4c9758234564d7306, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Draggable
+  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Block
+  weight: 0
+  hp: 0
+  space:
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   zOffset: 0
+  isOnField: 0
+  canAttach: 1
 --- !u!1 &1125544936725556893
 GameObject:
   m_ObjectHideFlags: 0
