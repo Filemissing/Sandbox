@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Reflection;
 
 [CreateAssetMenu(fileName = "Inventory", menuName = "Scriptable Objects/Inventory")]
 public class Inventory : ScriptableObject
@@ -20,35 +21,14 @@ public class Inventory : ScriptableObject
     [Header("Money")]
     public int money = 100;
 
-    public void AddMaterial(ComponentTypes componentType)
+    public void AddMaterial(string componentType)
     {
-        switch (componentType)
-        {
-            case ComponentTypes.Wood:
-                woodCount++;
-                break;
-            case ComponentTypes.Brick:
-                brickCount++;
-                break;
-            case ComponentTypes.Metal:
-                metalCount++;
-                break;
-            case ComponentTypes.Chair:
-                chairCount++;
-                break;
-            case ComponentTypes.SmallWheel:
-                smallWheelCount++;
-                break;
-            case ComponentTypes.BigWheel:
-                bigWheelCount++;
-                break;
-            case ComponentTypes.Dynamite:
-                dynamiteCount++;
-                break;
-            case ComponentTypes.Chainsaw:
-                chainsawCount++;
-                break;
-        }
+        FieldInfo field = this.GetType().GetField(componentType.ToString() + "Count", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if(field == null) 
+            throw new System.Exception("No such component in inventory: " + componentType.ToString());
+        
+        field.SetValue(this, (int)field.GetValue(this) + 1);
     }
     public void AddMoney(int value)
     {

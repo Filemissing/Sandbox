@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff7cb89f50e90c4a8f936e0e96634c8, type: 3}
   m_Name: Chair
   m_EditorClassIdentifier: 
-  type: 3
+  componentName: chair
   texture: {fileID: 2800000, guid: 13665bf2c7618c340a435ced37ec14b7, type: 3}
   cost: 100

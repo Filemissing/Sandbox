@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff7cb89f50e90c4a8f936e0e96634c8, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  type: 0
+  componentName: wood
   texture: {fileID: 2800000, guid: acb16e72392ec7646ba7b9035be929d4, type: 3}
   cost: 100

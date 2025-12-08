@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff7cb89f50e90c4a8f936e0e96634c8, type: 3}
   m_Name: Metal
   m_EditorClassIdentifier: 
-  type: 2
+  componentName: metal
   texture: {fileID: 2800000, guid: 703abfdb30376f64399b65be3e646ca9, type: 3}
   cost: 100

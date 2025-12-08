@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217bd3d5cebb0cb4c8c68f5b5d29cbe5, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  woodCount: 0
-  brickCount: 0
+  woodCount: 4
+  brickCount: 2
   metalCount: 0
   chairCount: 1
-  smallWheelCount: 0
-  bigWheelCount: 0
-  chainsawCount: 0
+  smallWheelCount: 1
+  bigWheelCount: 1
+  chainsawCount: 1
   dynamiteCount: 0
-  money: 100
+  money: 0
