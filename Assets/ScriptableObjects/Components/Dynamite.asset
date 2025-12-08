@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentName: dynamite
   texture: {fileID: 2800000, guid: 0dce0de0d3a34ca4a97c707735cc7498, type: 3}
+  prefab: {fileID: 797661471942210029, guid: 1dd4a244c4a5722459c5bb9468b54884, type: 3}
   cost: 100

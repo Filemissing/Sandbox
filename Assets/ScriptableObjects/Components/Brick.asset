@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentName: brick
   texture: {fileID: 2800000, guid: 2a1709292eceddf43b8d1afacbf0c595, type: 3}
+  prefab: {fileID: 7441862397184916438, guid: dcd7eb1b199263e41adf94340bea745c, type: 3}
   cost: 100

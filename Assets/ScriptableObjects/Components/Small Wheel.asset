@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentName: smallWheel
   texture: {fileID: 2800000, guid: 34e26cfb2dffe3c49989aba2a992d655, type: 3}
+  prefab: {fileID: 1683384796443688888, guid: 01c787777169ff64eb07fef8975eb8e7, type: 3}
   cost: 100

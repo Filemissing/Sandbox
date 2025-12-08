@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   componentName: chainsaw
   texture: {fileID: 2800000, guid: 1e007dd5a5ac2f1438cc712776506bfc, type: 3}
+  prefab: {fileID: 6042611823049296522, guid: 7497038e4c8557a4ba054897f115a204, type: 3}
   cost: 100
