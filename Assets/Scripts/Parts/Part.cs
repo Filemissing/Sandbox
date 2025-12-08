@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace RobotGame
@@ -21,18 +21,17 @@ namespace RobotGame
 
         public float zOffset;
 
-        bool isDragging;
         Transform originalParent;
         Vector3Int originalPosition;
         /*[HideInInspector]*/ public bool isOnField;
         public void OnBeginDrag(PointerEventData eventData)
         {
-            isDragging = true;
             originalParent = transform.parent;
             originalPosition = Vector3Int.RoundToInt(transform.position);
             transform.SetParent(null);
 
             if (isOnField) BuildField.instance?.RemovePart(this, new Vector2Int(originalPosition.x, originalPosition.y));
+            else PartLibrary.instance.RemovePart(this);
 
             foreach (Collider collider in GetComponentsInChildren<Collider>())
             {
@@ -48,16 +47,28 @@ namespace RobotGame
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            isDragging = false;
-
             foreach (Collider collider in GetComponentsInChildren<Collider>())
-            {
                 collider.enabled = true;
-            }
 
+            // if a drop handler accepted the part we are done
             if (eventData.used) return;
-            transform.SetParent(originalParent);
-            transform.position = originalPosition;
+
+            // failed placement - restore original field state
+            if (originalParent == BuildField.instance.robotParent)
+            {
+                // attempt to re-place the part at original grid position
+                Vector2Int gridPos = new Vector2Int(originalPosition.x, originalPosition.y);
+
+                if (BuildField.instance.TryAddPart(this, gridPos))
+                {
+                    isOnField = true;
+
+                    transform.SetParent(originalParent);
+                    transform.position = originalPosition;
+                    return;
+                }
+            }
+            PartLibrary.instance.ReturnPart(this); // fallback to part library
         }
 
         public Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)

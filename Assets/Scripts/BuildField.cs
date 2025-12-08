@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,6 +14,8 @@ namespace RobotGame
         // true is occupied, false is free
         Block[,] backField; // contains building blocks
         (Part, bool)[,] frontField; // contains weapons and wheels, bool isRoot for multi-cell parts
+
+        public Transform robotParent;
 
         private void Awake()
         {
@@ -44,6 +44,7 @@ namespace RobotGame
                 {
                     backField[position.x, position.y] = block;
 
+                    block.transform.SetParent(robotParent);
                     return true;
                 }
                 return false;
@@ -84,6 +85,8 @@ namespace RobotGame
                     }
 
                     frontField[position.x, position.y].Item2 = true; // mark root
+                    part.rootBlock = backField[position.x, position.y];
+                    part.transform.SetParent(robotParent);
                 }
                 return canPlace;
             }
@@ -96,7 +99,7 @@ namespace RobotGame
                 throw new Exception("No part at given position.");
             }
 
-            return Vector2Int.RoundToInt(part.rootBlock.transform.position) - rect.position;
+            return GetRoot(part);
         }
         public Vector2Int GetRoot(Part part)
         {
@@ -117,11 +120,12 @@ namespace RobotGame
             {
                 if (block.attachedPart != null)
                 {
-                    RemovePart(block.attachedPart, root);
+                    PartLibrary.instance.ReturnPart(block.attachedPart);
                     block.attachedPart = null;
                 }
 
                 backField[root.x, root.y] = null;
+                block.isOnField = false;
                 return;
             }
 
@@ -142,8 +146,8 @@ namespace RobotGame
 
             part.isOnField = false;
             part.rootBlock = null;
+            part.transform.SetParent(null);
         }
-
 
         public void OnDrop(PointerEventData eventData)
         {
