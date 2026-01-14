@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,7 +17,17 @@ namespace RobotGame
         Block[,] backField; // contains building blocks
         (Part, bool)[,] frontField; // contains weapons and wheels, bool isRoot for multi-cell parts
 
+        public Block seat;
+
         public Transform robotParent;
+
+        public Vector2Int[] orthogonalDirections = new Vector2Int[]
+        {
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
 
         private void Awake()
         {
@@ -27,6 +39,28 @@ namespace RobotGame
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial.SetTextureScale("_BaseMap", rect.size);
             meshRenderer.sharedMaterial.SetTextureOffset("_BaseMap", new Vector2(.5f, .5f));
+        }
+
+        public Vector2Int GetRoot(Vector2Int position)
+        {
+            (Part part, bool isRoot) = frontField[position.x, position.y];
+            if (part == null)
+            {
+                throw new Exception("No part at given position.");
+            }
+
+            return GetRoot(part);
+        }
+        public Vector2Int GetRoot(Part part)
+        {
+            if (part is Block)
+            {
+                return Vector2Int.RoundToInt(part.transform.position) - rect.position;
+            }
+            else
+            {
+                return Vector2Int.RoundToInt(part.rootBlock.transform.position) - rect.position;
+            }
         }
 
         public bool TryAddPart(Part part, Vector2Int pos)
@@ -91,27 +125,6 @@ namespace RobotGame
                 return canPlace;
             }
         }
-        public Vector2Int GetRoot(Vector2Int position)
-        {
-            (Part part, bool isRoot) = frontField[position.x, position.y];
-            if(part == null)
-            {
-                throw new Exception("No part at given position.");
-            }
-
-            return GetRoot(part);
-        }
-        public Vector2Int GetRoot(Part part)
-        {
-            if(part is Block)
-            {
-                return Vector2Int.RoundToInt(part.transform.position) - rect.position;
-            }
-            else
-            {
-                return Vector2Int.RoundToInt(part.rootBlock.transform.position) - rect.position;
-            }
-        }
         public void RemovePart(Part part, Vector2Int pos)
         {
             Vector2Int root = GetRoot(part);
@@ -147,6 +160,74 @@ namespace RobotGame
             part.isOnField = false;
             part.rootBlock = null;
             part.transform.SetParent(null);
+        }
+
+        public void Assemble()
+        {
+            if (!seat.isOnField)
+            {
+                Debug.LogWarning("Cannot Assemble robot without seat");
+                return;
+            }
+
+            GameObject assembly = new GameObject("Assembly");
+            GameObject rotationCorrector = new GameObject("RotationObject");
+
+            rotationCorrector.transform.SetParent(assembly.transform);
+            seat.transform.SetParent(rotationCorrector.transform);
+
+            Rigidbody rb = assembly.AddComponent<Rigidbody>();
+            rb.mass = 1800;
+
+
+            // BFS weld
+            Queue<Block> weldQueue = new Queue<Block>();
+            HashSet<Block> visited = new HashSet<Block>();
+
+            weldQueue.Enqueue(seat);
+
+            while (weldQueue.Count > 0)
+            {
+                Block current = weldQueue.Dequeue();
+
+                Part attachedPart = current.attachedPart;
+                if (attachedPart != null && attachedPart.rootBlock == current)
+                {
+                    attachedPart.transform.SetParent(current.transform);
+                    if (attachedPart is Wheel wheel)
+                    {
+                        wheel.SetActive();
+
+                        // clone to other side
+                        Wheel wheelClone = Instantiate(wheel, current.transform);
+                        wheelClone.transform.localPosition = new Vector3(wheel.transform.localPosition.x, wheel.transform.localPosition.y, -wheel.transform.localPosition.z);
+                        wheelClone.SetActive();
+                    }
+                }
+
+                foreach (var dir in orthogonalDirections)
+                {
+                    Vector2Int neighborPos = GetRoot(current) + dir;
+
+                    if (neighborPos.x < 0 || neighborPos.x >= rect.width || neighborPos.y < 0|| neighborPos.y >= rect.height)
+                        continue;
+
+                    Block neighborBlock = backField[neighborPos.x, neighborPos.y];
+                    if (neighborBlock != null)
+                    {
+                        if (!visited.Contains(neighborBlock))
+                        {
+                            neighborBlock.transform.SetParent(current.transform);
+                            weldQueue.Enqueue(neighborBlock);
+                        }
+                    }
+                }
+
+                visited.Add(current);
+            }
+
+            rotationCorrector.transform.rotation = Quaternion.Euler(0, -90, 0);
+
         }
 
         public void OnDrop(PointerEventData eventData)

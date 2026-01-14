@@ -48,7 +48,10 @@ namespace RobotGame
         public void OnEndDrag(PointerEventData eventData)
         {
             foreach (Collider collider in GetComponentsInChildren<Collider>())
+            {
+                if (collider is WheelCollider) continue; // wheel colliders should remain disabled during placement
                 collider.enabled = true;
+            }
 
             // if a drop handler accepted the part we are done
             if (eventData.used) return;

@@ -16,12 +16,19 @@ namespace RobotGame
 
         private void Update()
         {
-            if (wheelCollider != null)
+            if (wheelCollider != null && wheelCollider.enabled)
             {
                 wheelCollider.motorTorque = speed;
-                wheelModel.transform.position = wheelCollider.transform.position;
-                wheelModel.transform.rotation = wheelCollider.transform.rotation;
+                wheelCollider.GetWorldPose(out Vector3 pos, out Quaternion quat);
+                Quaternion rotation = Quaternion.Euler(0, 90, quat.eulerAngles.x);
+                wheelModel.transform.SetPositionAndRotation(pos, rotation);
             }
+        }
+
+        public void SetActive()
+        {
+            GetComponent<BoxCollider>().enabled = false;
+            wheelCollider.enabled = true;
         }
     } 
 }

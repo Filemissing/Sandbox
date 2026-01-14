@@ -108,6 +108,11 @@ namespace RobotGame
 
             UpdateDisplay();
 
+            if (partData == seatSO)
+            {
+                BuildField.instance.seat = part as Block;
+            }
+
             return part;
         }
         public void ReturnPart(Part part)
