@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90fb84775106ad94dab8dd4fadc1af1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Weapon
-  weight: 0
-  hp: 0
+  weight: 5
+  hp: 20
   space:
     x: 0
     y: 0
@@ -57,6 +57,8 @@ MonoBehaviour:
   rootBlock: {fileID: 0}
   zOffset: -1
   isOnField: 0
+  dps: 0
+  hitbox: {fileID: 0}
 --- !u!114 &6500973160095817728
 MonoBehaviour:
   m_ObjectHideFlags: 0

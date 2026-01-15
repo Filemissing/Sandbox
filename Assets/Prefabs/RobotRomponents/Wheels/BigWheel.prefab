@@ -137,8 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cee687324d99e541b19249cf0578109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Wheel
-  weight: 0
-  hp: 0
+  weight: 120
+  hp: 150
   space:
     x: -1
     y: -1
@@ -147,7 +147,7 @@ MonoBehaviour:
   rootBlock: {fileID: 0}
   zOffset: -1
   isOnField: 0
-  speed: 0
+  speed: 25
 --- !u!114 &-208738652510650087
 MonoBehaviour:
   m_ObjectHideFlags: 0

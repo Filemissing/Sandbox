@@ -177,12 +177,12 @@ namespace RobotGame
             seat.transform.SetParent(rotationCorrector.transform);
 
             Rigidbody rb = assembly.AddComponent<Rigidbody>();
-            rb.mass = 1800;
-
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
             // BFS weld
             Queue<Block> weldQueue = new Queue<Block>();
             HashSet<Block> visited = new HashSet<Block>();
+            HashSet<Wheel> wheels = new HashSet<Wheel>(); // store all wheels for suspension calculation later
 
             weldQueue.Enqueue(seat);
 
@@ -197,11 +197,13 @@ namespace RobotGame
                     if (attachedPart is Wheel wheel)
                     {
                         wheel.SetActive();
+                        wheels.Add(wheel);
 
-                        // clone to other side
+                        // clone wheel to other side
                         Wheel wheelClone = Instantiate(wheel, current.transform);
                         wheelClone.transform.localPosition = new Vector3(wheel.transform.localPosition.x, wheel.transform.localPosition.y, -wheel.transform.localPosition.z);
                         wheelClone.SetActive();
+                        wheels.Add(wheelClone);
                     }
                 }
 
@@ -226,8 +228,50 @@ namespace RobotGame
                 visited.Add(current);
             }
 
-            rotationCorrector.transform.rotation = Quaternion.Euler(0, -90, 0);
+            rotationCorrector.transform.rotation = Quaternion.Euler(0, -90, 0); // adjust rotation to match wheel colliders
 
+            // calculate center of mass
+            float totalWeight = 0;
+            foreach (Block block in visited)
+            {
+                totalWeight += block.weight;
+                if (block.attachedPart != null && block.attachedPart.rootBlock == block)
+                    totalWeight += block.attachedPart.weight;
+            }
+
+            Vector3 centerOfMass = Vector3.zero;
+            foreach (var block in visited)
+            {
+                Vector3 relativePos = seat.transform.InverseTransformPoint(block.transform.position);
+
+                float mass = block.weight;
+
+                if (block.attachedPart != null && block.attachedPart.rootBlock == block)
+                    mass += block.attachedPart.weight;
+
+                centerOfMass += relativePos * mass;
+            }
+
+            // TODO: hack to get total mass to 1800kg needed for the suspension. Better: change suspesion parameters based on mass
+            centerOfMass /= totalWeight;
+            float factor = 1800 / totalWeight;
+
+            foreach (Block block in visited)
+            {
+                block.weight *= factor;
+            }
+
+            rb.mass = 1800; //  totalWeight;
+
+            // move seat so assembly center of mass is at origin
+            seat.transform.localPosition = -centerOfMass;
+            rb.centerOfMass = Vector3.zero; // correct since we moved the root to the Center of Mass
+
+
+            assembly.transform.Translate(0, 2, 0); // lift assembly above ground
+
+            DontDestroyOnLoad(assembly);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("BattleScene");
         }
 
         public void OnDrop(PointerEventData eventData)

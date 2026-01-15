@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55896765ac843dd4c9758234564d7306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Block
-  weight: 0
-  hp: 0
+  weight: 100
+  hp: 200
   space:
     x: 0
     y: 0

@@ -23,7 +23,7 @@ namespace RobotGame
 
         Transform originalParent;
         Vector3Int originalPosition;
-        /*[HideInInspector]*/ public bool isOnField;
+        public bool isOnField;
         public void OnBeginDrag(PointerEventData eventData)
         {
             originalParent = transform.parent;
