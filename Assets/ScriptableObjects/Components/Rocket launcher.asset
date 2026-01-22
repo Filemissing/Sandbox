@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff7cb89f50e90c4a8f936e0e96634c8, type: 3}
+  m_Name: Rocket launcher
+  m_EditorClassIdentifier: Assembly-CSharp::BuildObject
+  texture: {fileID: 2800000, guid: 799a3a6e83566684bb82715a4a173b98, type: 3}
+  prefab: {fileID: 3475998232833196066, guid: 048468be6ec21b94c8e2745d24e49891, type: 3}
+  cost: 100

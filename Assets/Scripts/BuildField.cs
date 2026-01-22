@@ -194,16 +194,24 @@ namespace RobotGame
                 if (attachedPart != null && attachedPart.rootBlock == current)
                 {
                     attachedPart.transform.SetParent(current.transform);
-                    if (attachedPart is Wheel wheel)
+                    if (attachedPart is Propulsion propulsion)
                     {
-                        wheel.SetActive();
-                        wheels.Add(wheel);
+                        propulsion.SetActive(rb);
 
-                        // clone wheel to other side
-                        Wheel wheelClone = Instantiate(wheel, current.transform);
-                        wheelClone.transform.localPosition = new Vector3(wheel.transform.localPosition.x, wheel.transform.localPosition.y, -wheel.transform.localPosition.z);
-                        wheelClone.SetActive();
-                        wheels.Add(wheelClone);
+                        if (propulsion is Wheel wheel)
+                        {
+                            wheels.Add(wheel);
+
+                            // clone wheel to other side
+                            Wheel wheelClone = Instantiate(wheel, current.transform);
+                            wheelClone.transform.localPosition = new Vector3(wheel.transform.localPosition.x, wheel.transform.localPosition.y, -wheel.transform.localPosition.z);
+                            wheelClone.SetActive(rb);
+                            wheels.Add(wheelClone);
+                        }
+                    }
+                    if (attachedPart is Weapon weapon)
+                    {
+                        weapon.Activate();
                     }
                 }
 
@@ -268,10 +276,10 @@ namespace RobotGame
             rb.centerOfMass = Vector3.zero; // correct since we moved the root to the Center of Mass
 
 
-            assembly.transform.Translate(0, 2, 0); // lift assembly above ground
+            assembly.transform.Translate(0, 2, -10); // move assembly to start position (hopefully)
 
             DontDestroyOnLoad(assembly);
-            UnityEngine.SceneManagement.SceneManager.LoadScene("BattleScene");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Battle Scene");
         }
 
         public void OnDrop(PointerEventData eventData)

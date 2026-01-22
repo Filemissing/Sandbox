@@ -18,10 +18,10 @@ namespace RobotGame
             None = 0,
             Blocks = 1,
             Weapons = 2,
-            Wheels = 4
+            Propulsion = 4
         }
 
-        Categories displayCategories = Categories.Blocks | Categories.Weapons | Categories.Wheels;
+        Categories displayCategories = Categories.Blocks | Categories.Weapons | Categories.Propulsion;
         bool IsCategoryEnabled(Categories categorie)
         {
             if (categorie == Categories.None) return false;
@@ -88,7 +88,7 @@ namespace RobotGame
                 lastPosition += 1 + part.space.width;
                 return;
             }
-            if (part is Wheel wheel && IsCategoryEnabled(Categories.Wheels))
+            if (part is Propulsion propulsion && IsCategoryEnabled(Categories.Propulsion))
             {
                 part.transform.position = transform.position + Vector3.right * (lastPosition + (part.space.width / 2));
                 lastPosition += 1 + part.space.width;

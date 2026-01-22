@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RobotGame
 {
-	public class Wheel : Part
+	public class Wheel : Propulsion
 	{
 		WheelCollider wheelCollider;
         MeshRenderer wheelModel;
@@ -25,7 +25,7 @@ namespace RobotGame
             }
         }
 
-        public void SetActive()
+        public override void SetActive(Rigidbody rb)
         {
             GetComponent<BoxCollider>().enabled = false;
             wheelCollider.enabled = true;

@@ -187,8 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5516561741379367000}
-  - component: {fileID: 3476467745187403631}
-  - component: {fileID: 5353725828331998936}
+  - component: {fileID: 8391894337439519547}
   - component: {fileID: 3749111323885293533}
   m_Layer: 0
   m_Name: Seat
@@ -213,7 +212,7 @@ Transform:
   - {fileID: 7635952824374528116}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3476467745187403631
+--- !u!114 &8391894337439519547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,9 +221,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6341140178874807748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55896765ac843dd4c9758234564d7306, type: 3}
+  m_Script: {fileID: 11500000, guid: f14c568530e04c3439cffc6bd63ab73a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Block
+  m_EditorClassIdentifier: Assembly-CSharp::RobotGame.Seat
   weight: 20
   hp: 100
   space:
@@ -236,18 +235,7 @@ MonoBehaviour:
   zOffset: 0
   isOnField: 0
   attachedPart: {fileID: 0}
---- !u!114 &5353725828331998936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6341140178874807748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79831ae605ed54f628ebbbb6ccaa3591, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Weldable
+  isEnemySeat: 0
 --- !u!65 &3749111323885293533
 BoxCollider:
   m_ObjectHideFlags: 0

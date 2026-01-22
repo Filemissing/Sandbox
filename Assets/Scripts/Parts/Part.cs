@@ -16,6 +16,7 @@ namespace RobotGame
             transform.SetParent(null);
             Rigidbody rb = gameObject.AddComponent<Rigidbody>();
             rb.mass = weight;
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
 
 
