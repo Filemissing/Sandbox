@@ -278,8 +278,19 @@ namespace RobotGame
 
             assembly.transform.Translate(0, 2, -10); // move assembly to start position (hopefully)
 
+            SetTagRecursive(assembly, "Player");
+
             DontDestroyOnLoad(assembly);
             UnityEngine.SceneManagement.SceneManager.LoadScene("Battle Scene");
+        }
+
+        void SetTagRecursive(GameObject root, string tag)
+        {
+            root.tag = tag;
+            foreach (Transform child in root.transform)
+            {
+                SetTagRecursive(child.gameObject, tag);
+            }
         }
 
         public void OnDrop(PointerEventData eventData)

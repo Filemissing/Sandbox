@@ -28,6 +28,10 @@ public class UIManager : MonoBehaviour
 
     public void MainMenu()
     {
+        foreach (var part in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            Destroy(part);
+        }
         SceneManager.LoadScene("Main Menu");
     }
 }
