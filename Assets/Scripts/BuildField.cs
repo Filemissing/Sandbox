@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,10 +17,11 @@ namespace RobotGame
         (Part, bool)[,] frontField; // contains weapons and wheels, bool isRoot for multi-cell parts
 
         public Block seat;
-
         public Transform robotParent;
 
-        public Vector2Int[] orthogonalDirections = new Vector2Int[]
+        [SerializeField] CanvasGroup seatWarning;
+
+        Vector2Int[] orthogonalDirections = new Vector2Int[]
         {
             Vector2Int.up,
             Vector2Int.down,
@@ -166,7 +166,9 @@ namespace RobotGame
         {
             if (!seat.isOnField)
             {
-                Debug.LogWarning("Cannot Assemble robot without seat");
+                seatWarning.alpha = 1;
+                seatWarning.interactable = true;
+                seatWarning.blocksRaycasts = true;
                 return;
             }
 
